@@ -29,3 +29,32 @@ def get_board():
     if 'Item' not in response:
         raise HTTPException(status_code=404, detail="Board not found")
     return response["Item"]
+
+@app.get("/getTickets")
+def get_tickets():
+    """
+    Get the tickets from the DynamoDB table.
+    """
+    response = Board.table.scan(AttributesToGet=['Tickets'])
+    
+    # Check if the item exists
+    if 'Items' not in response:
+        raise HTTPException(status_code=404, detail="Tickets not found")
+    
+    return response["Items"]
+
+@app.get("/getColumns")
+def get_columns():
+    """
+    Get the columns from the DynamoDB table.
+    """
+    response = Board.table.scan(AttributesToGet=['Columns'])
+    print(response)
+    
+    # Check if the item exists
+    if 'Items' not in response:
+        raise HTTPException(status_code=404, detail="Columns not found")
+    
+    return response["Items"]
+
+
