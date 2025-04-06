@@ -80,7 +80,7 @@
           "Position": {
             "N": "0"
           },
-          "TItle": {
+          "Title": {
             "S": "Pretzels"
           }
         }
@@ -96,7 +96,7 @@
           "Position": {
             "N": "0"
           },
-          "TItle": {
+          "Title": {
             "S": "Learn some dance moves"
           }
         }
@@ -112,7 +112,7 @@
           "Position": {
             "N": "0"
           },
-          "TItle": {
+          "Title": {
             "S": "Become an Author"
           }
         }
@@ -128,7 +128,7 @@
           "Position": {
             "N": "0"
           },
-          "TItle": {
+          "Title": {
             "S": "Fly me to the moon"
           }
         }
