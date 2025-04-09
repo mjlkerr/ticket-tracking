@@ -8,6 +8,8 @@ from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+
+
 app = FastAPI()
 @app.get("/")
 def read_root():
@@ -17,6 +19,7 @@ def read_root():
 def get_board():
     """
     Get the board information from the DynamoDB table.
+    We only have one board to keep it simple.
     """
     response = Board.table.get_item(
         Key={
@@ -54,6 +57,24 @@ def get_columns():
     # Check if the item exists
     if 'Items' not in response:
         raise HTTPException(status_code=404, detail="Columns not found")
+    
+    return response["Items"]
+
+@app.get("/getTicketsByColumn/")
+def get_tickets_by_column(column: str):
+    """
+    Get the tickets by column from the DynamoDB table.
+    """
+    tickets = Board.table.scan(AttributesToGet=['Tickets'])
+    print('tickets', tickets["Items"])
+    response = tickets(
+        FilterExpression=Attr('Column').eq(column),
+    )
+    print('response', response)
+    
+    # Check if the item exists
+    if 'Items' not in response:
+        raise HTTPException(status_code=404, detail="Tickets not found")
     
     return response["Items"]
 
