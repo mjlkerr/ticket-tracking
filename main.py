@@ -107,6 +107,53 @@ def rename_status_column(old_name: str, new_name: str):
     
     return response
 
+@app.post("/renameStatusColumn")
+def rename_status_column(old_name: str, new_name: str):
+    """
+    Rename a status column in the DynamoDB table.
+    """
+    response = Board.table.scan(AttributesToGet=['Status_Columns'])
+    status_columns = response["Items"][0]["Status_Columns"]
+    # Check if the old name exists
+    for item in status_columns:
+        if old_name == item['Name']:
+            item['Name'] = new_name
+            break
+    else:
+        raise HTTPException(status_code=404, detail=f"Status column '{old_name}' does not exist.")
+    
+    # Update the item in the DynamoDB table
+    response = Board.table.update_item(
+        Key={
+            'Board_ID': 1,
+            'Sprint_ID': 123
+        },
+        UpdateExpression="SET Status_Columns = :val",
+        ExpressionAttributeValues={
+            ':val': status_columns
+        }
+    )
+    
+    return response
+
+@app.post("/addTicket")
+def add_ticket(ticket: dict):
+    """
+    Add a ticket to the DynamoDB table.
+    """
+    response = Board.table.update_item(
+        Key={
+            'Board_ID': 1,
+            'Sprint_ID': 123
+        },
+        UpdateExpression="SET Tickets = list_append(Tickets, :val)",
+        ExpressionAttributeValues={
+            ':val': [ticket]
+        }
+    )
+    
+    return response
+
 
 
 
